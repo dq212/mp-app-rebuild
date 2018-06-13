@@ -515,37 +515,61 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
        // updateBikes()
         saveBikes()
     }
+//
+//    func photosViewController(_ controller: PhotosViewController, didFinishAddingThumbnail item: FB_ProjectItem) {
+//            print("DID FINISH ADDING THUMBNAIL IN PHOTOS VIEW CONTROLLER")
+//            print("\(projectIndexPath) is the Project Index Path for the project")
+//
+//            print("\(self.projectIndexPath ) this is the project index path")
+//            print(self.projectIndexPath?.row)
+//            print(bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?.count)
+//          self.tableSection = self.dict[self.sortedSections[(self.projectIndexPath?.section)!]]!
+//          self.tableSection[(projectIndexPath?.row)!] = item
+//            //bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = item
+//
+//        item.imagesArray = controller.projectImages
+//        bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects = self.projects
+//
+//        bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!] = bike
+//        //tableView.setEditing(false, animated: true)
+//        //updateBikes()
+////        DispatchQueue.main.async {
+////            self.tableView.reloadData()
+////        }
+////        self.setupTitleValues()
+//        saveBikes()
+//
+//        //self.projectIndexPath = nil
+//        photosViewController.navigationController?.popViewController(animated: true)
+//
+//    }
     
     func photosViewController(_ controller: PhotosViewController, didFinishAddingThumbnail item: FB_ProjectItem) {
-            print("DID FINISH ADDING THUMBNAIL IN PHOTOS VIEW CONTROLLER")
-            print("\(projectIndexPath) is the Project Index Path for the project")
-
-            print("\(self.projectIndexPath ) this is the project index path")
-            print(self.projectIndexPath?.row)
-            print(bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?.count)
-          self.tableSection = self.dict[self.sortedSections[(self.projectIndexPath?.section)!]]!
-          self.tableSection[(projectIndexPath?.row)!] = item
-            //bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = item
-     
-        item.imagesArray = controller.projectImages
+        print("DID FINISH ADDING THUMBNAIL IN PHOTOS VIEW CONTROLLER")
+        //            print("\(projectIndexPath) is the Project Index Path for the project")
+        //            print("\(self.projectIndexPath ) this is the project index path")
+        //            print(self.projectIndexPath?.row)
+        //            print(bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?.count)
+        // self.tableSection = self.dict[self.sortedSections[(self.projectIndexPath?.section)!]]!
+        //self.tableSection[(projectIndexPath?.row)!] = item
+        //bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = item
+        if controller.projectImages != nil {
+            item.imagesArray = controller.projectImages
+        }
         bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects = self.projects
-   
         bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!] = bike
         //tableView.setEditing(false, animated: true)
-        //updateBikes()
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//        }
-//        self.setupTitleValues()
+        updateBikes()
+        //        DispatchQueue.main.async {
+        //            self.tableView.reloadData()
+        //        }
+        //        self.setupTitleValues()
         saveBikes()
-        
         //self.projectIndexPath = nil
         photosViewController.navigationController?.popViewController(animated: true)
-        
     }
     
-    
-    
-    
 }
+    
+    
 
