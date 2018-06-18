@@ -293,12 +293,15 @@ func putBackupItems(vc:UIViewController, bikes:[FB_Bike], ref:DatabaseReference)
             
             print("\(tempBikes[0].projects?.count) TEMP Projects Count")
             
-            let unique_backedup = bikes.filterDuplicates { $1.uniqueID == $0.uniqueID }
+           //let unique_backedup = bikes.filterDuplicates { $1.uniqueID == $0.uniqueID }
+            let unique_backedup = bikes
+
             print("\(unique_backedup[0].projects?.count) Restored Projects Count")
             let m = tempBikes + unique_backedup
             
             print("\(m[0].projects?.count) this the the merged bikes")
-            unique_merged = m.filterDuplicates { $1.uniqueID == $0.uniqueID }
+           //unique_merged = m.filterDuplicates { $1.uniqueID == $0.uniqueID }
+            unique_merged = m.filterDuplicates { $1.uniqueID == $0.uniqueID && $1.timestamp == $0.timestamp }
             
             bikeTasks = []
         }

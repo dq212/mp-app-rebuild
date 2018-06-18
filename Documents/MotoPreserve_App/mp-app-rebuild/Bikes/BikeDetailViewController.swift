@@ -112,13 +112,18 @@ UITextFieldDelegate{
         imageView.isHidden = false
     }
     
+    
+    
     func showThumb(imageName: String, bike:FB_Bike) {
 
         if bike.imageName != nil {
             let helper = MRPhotosHelper()
             if let identifier = bike.imageName {
                 helper.retrieveImageWithIdentifer(localIdentifier: identifier, completion: { (image) -> Void in
-                    self.imageView.image = image
+                 
+                         self.imageView.image = image
+                 
+                   
                 })
             }
         } else {
@@ -914,10 +919,11 @@ extension BikeDetailViewController: UIImagePickerControllerDelegate, UINavigatio
             selectedImageFromPicker = originalImage as? UIImage
         }
         if let theImage = selectedImageFromPicker {
-              showImage(image: theImage)
-            let _:NSData = UIImageJPEGRepresentation(theImage, 0.7) as! NSData
-          
+            
+        let _:NSData = UIImageJPEGRepresentation(theImage, 0.7) as! NSData
+         // showImage(image: theImage)
         saveImageToAlbum(image: theImage, view: self.view)
+            //showImage(image: theImage)
         }
         
         picker.dismiss(animated: true, completion: nil)
@@ -931,6 +937,10 @@ extension BikeDetailViewController: UIImagePickerControllerDelegate, UINavigatio
         helper.saveImageAsAsset(image: image, completion: { (localIdentifier) -> Void in
             imageIdentifier = localIdentifier
             self.tempImageName = imageIdentifier
+            DispatchQueue.main.async {
+                self.showImage(image: image)
+            }
+           //self.showImage(image: image)
         })
     }
     

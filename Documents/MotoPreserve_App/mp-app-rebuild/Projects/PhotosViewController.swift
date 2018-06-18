@@ -126,6 +126,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     
     @objc func handleEditProject() {
+        saveBikes()
         let addProjectViewController = AddProjectViewController()
         let navController = UINavigationController(rootViewController: addProjectViewController)
         _ = ProjectViewController()
@@ -133,6 +134,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         addProjectViewController.bike = self.bike
         addProjectViewController.bikes = self.bikes
         addProjectViewController.projectIndexPath = self.projectIndexPath
+        print(self.projectIndexPath)
         addProjectViewController.projectToEdit = self.project
         self.present(navController, animated: true, completion: nil)
     }
@@ -345,7 +347,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
         super.viewDidLoad()
         imagePicker.navigationBar.tintColor = UIColor.mainRed()
         checkStatus()
-
+        print("@@@@@@ \(projectIndexPath)")
 //      checkPermission()
         
         imagePicker.sourceType = .photoLibrary
@@ -550,9 +552,14 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
    
     
     @objc func doneClicked(){
+    
         project.notes = notesTextView.text
         updateBikes()
-        bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!].notes = project.notes
+        
+        //bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!].notes = project.notes
+        
+        bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = project
+        
         saveBikes()
         view.endEditing(true)
         if notesTextView.text.isEmpty {
@@ -670,7 +677,7 @@ class PhotosViewController: UIViewController, UICollectionViewDelegate, UICollec
      func saveBikes() {
         
         project.imagesArray = projectImages
-       // bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = project
+        bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = project
         bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!] = bike
         
         BikeData.sharedInstance.allBikes = self.bikes

@@ -18,11 +18,15 @@ import FirebaseDatabase
 protocol AddProjectViewControllerDelegate: class {
     func addProjectViewControllerDidCancel(_ controller: AddProjectViewController)
     func addProjectViewController(_ controller:AddProjectViewController, didFinishAdding item: FB_ProjectItem)
+    func addProjectViewController(_ controller:AddProjectViewController, didFinishAddingAfterYes item: FB_ProjectItem)
+    func addProjectViewController(_ controller:AddProjectViewController, didFinishAddingAfterCancel item: FB_ProjectItem)
+
     func addProjectViewController(_ controller:AddProjectViewController, didFinishAddingThumbnail item: FB_ProjectItem)
     func addProjectViewController(_ controller: AddProjectViewController, didFinishEditing item: FB_ProjectItem)
 }
 
-class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UIScrollViewDelegate {
+class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UIScrollViewDelegate, UINavigationControllerDelegate {
+
     
     var doneBarButton: UIBarButtonItem?
     var cancelBarButton: UIBarButtonItem?
@@ -473,13 +477,13 @@ class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerV
             }
            
             item.category = selectedCategory
-            print("SHOW ME THE CATEGORY \(item.category)")
+            //print("SHOW ME THE CATEGORY \(item.category)")
             item.notes = notesTextView.text
             print(bikes)
             print(selectedIndexPath)
             print(projectIndexPath)
 
-           saveBikes()
+         
        
             self.isFromNew = false
             var _:String?
@@ -492,6 +496,8 @@ class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerV
             
             showThumb(thumbName: "bikeThumbNail", item:item)
             bikes[(selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!].notes = item.notes
+            
+            saveBikes()
            // 
             delegate?.addProjectViewController(self, didFinishEditing: item)
             
@@ -508,7 +514,10 @@ class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerV
             
             let savedBikes = loadUserBikes()
             self.bikes = savedBikes!
+            //bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!] = bike
+            bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects? = bike.projects!
             bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!] = bike
+           
             updateBikes()
             print("DID FINISH ADDING IN PROJECTS **")
             print("        THE BIKE.PROJECTS COUNT IS: \(String(describing: bike.projects?.count))")
@@ -526,7 +535,7 @@ class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerV
                 alertController.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (_) in
                     self.isFromNew = true
                     if let p = item {
-                        self.delegate?.addProjectViewController(self, didFinishAdding: p)
+                        self.delegate?.addProjectViewController(self, didFinishAddingAfterYes: p)
                     }
                     self.pickPhoto()
                 }))
@@ -671,7 +680,7 @@ func addThumbnailImage(item: FB_ProjectItem) {
         }
     }
 
-extension AddProjectViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension AddProjectViewController: UIImagePickerControllerDelegate  {
     @objc func pickPhoto() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             showPhotoMenu()
@@ -705,9 +714,7 @@ extension AddProjectViewController: UIImagePickerControllerDelegate, UINavigatio
         present(imagePicker, animated: true, completion: nil)
     }
     
-  
-    
-    func choosePhotoFromLibrary() {
+      func choosePhotoFromLibrary() {
         let imagePicker = UIImagePickerController()
         imagePicker.navigationBar.tintColor = UIColor.mainRed()
         imagePicker.sourceType = .photoLibrary
