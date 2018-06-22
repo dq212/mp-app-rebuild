@@ -41,6 +41,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     var projectIndexPath:IndexPath?
     var selectedIndexPath:IndexPath?
     
+
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -191,6 +193,8 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             let mySet = Set<String>(categoryArray)
             categoryArray = Array(mySet)
             categoryArray.sort{$0 < $1}
+            
+           
         }
         
         self.projectTextArray = Array(repeating: [FB_ProjectItem]() , count: categoryArray.count )
@@ -430,37 +434,47 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func addProjectViewController(_ controller: AddProjectViewController, didFinishAdding item: FB_ProjectItem) {
         print("DID FINISH ADDING ----------------->>>>>>>>")
-       
-         DispatchQueue.main.async {
+        
+        DispatchQueue.main.async {
             self.tableView.setEditing(false, animated: true)
             self.getProjects()
-          //  self.setupTitleValues()
-            var sec:Int = 0
-            var r:Int = 0
-            var c:Int = (self.projects?.count)!
-            var nSections = self.tableView.numberOfSections
-            print("number of sections \(nSections)")
-        for j in 0 ..< nSections {
-            if nSections == nil {
-                print("not nil")
-                self.projectIndexPath = [0, 0]
-            }
-            var nRows = self.tableView.numberOfRows(inSection: j)
-            print("number of rows \(nRows)")
-
-            for i in 0 ..< nRows {
-                var indexPath = IndexPath(row: i, section: j)
-                print("printed index path \(indexPath)")
-                self.projectIndexPath = indexPath
-            }
-        }
-
-//        if r != nil && sec != nil {
-//            self.projectIndexPath = IndexPath(row: r, section: sec)
-//        }
+            self.setupTitleValues()
+            
+            
+            let indexOfSection = self.sortedSections.index(of: item.category!)
+            
+            print("DAMMIT give me the idex \(indexOfSection)")
+            
+            print(self.dict)
+            
+            let arr = self.dict[item.category!]
+            
+            let indexOfRow = arr?.index(where: { $0.uniqueID == item.uniqueID! })
+            
+         
+            self.projectIndexPath = IndexPath(row: indexOfRow!, section: indexOfSection!)
+//            var sec:Int = 0
+//            var r:Int = 0
+//            var c:Int = (self.projects?.count)!
+//            var nSections = self.tableView.numberOfSections
+//            for j in 0 ..< nSections {
+//                if nSections == 0 {
+//                    self.projectIndexPath = [0, 0]
+//                }
+//                var nRows = self.tableView.numberOfRows(inSection: j)
+//
+//                for i in 0 ..< nRows {
+//                    var indexPath = IndexPath(row: i, section: j)
+//                    print("printed index path \(indexPath)")
+//                }
+//            }
+//
+//            if r != nil && sec != nil {
+//                self.projectIndexPath = IndexPath(row: r, section: sec)
+//            }
             self.currentProject = item
             self.photosViewController.projectIndexPath = self.projectIndexPath
-            print("THE NEW AND IMPROVED $$$$$ INDEX PATH \(self.projectIndexPath)")
+            print("THE NEW AND IMPROVED INDEX PATH \(self.projectIndexPath)")
             self.photosViewController.project = self.currentProject
             print("\(item) this is the project as item")
             self.photosViewController.bike = self.bike
@@ -469,14 +483,13 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             
             self.photosViewController.projectImages = []
             self.photosViewController.collectionView?.reloadData()
-            self.updateBikes()
-            //self.saveBikes()
-        
+            
+            self.saveBikes()
+            
             self.navigationController?.pushViewController(self.photosViewController, animated: true)
         }
-        
         dismiss(animated: true, completion: nil)
-        }
+    }
     
     func addProjectViewController(_ controller: AddProjectViewController, didFinishEditing item: FB_ProjectItem) {
             print("DID FINISH EDITING ***************************")
@@ -544,7 +557,7 @@ class ProjectViewController: UIViewController, UITableViewDataSource, UITableVie
             self.photosViewController.collectionView?.reloadData()
             // self.saveBikes()
             print("this is where updates")
-           // self.updateBikes()
+            self.updateBikes()
             
             // self.navigationController?.pushViewController(self.photosViewController, animated: true)
         }

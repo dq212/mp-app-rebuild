@@ -496,6 +496,9 @@ class AddProjectViewController: UIViewController, UITextFieldDelegate, UIPickerV
             
             showThumb(thumbName: "bikeThumbNail", item:item)
             bikes[(selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!].notes = item.notes
+            print(" **************  \(bikes[(selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!].notes)")
+            bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!].projects?[(projectIndexPath?.row)!] = projectToEdit!
+            bikes[(BikeData.sharedInstance.selectedIndexPath?.row)!] = bike
             
             saveBikes()
            // 
